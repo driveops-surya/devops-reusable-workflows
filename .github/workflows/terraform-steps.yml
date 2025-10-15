@@ -30,7 +30,7 @@ jobs:
   terraform:
     name: Terraform ${{ inputs.action }} - ${{ inputs.environment }}
     runs-on: self-hosted
-
+    environment: ${{ inputs.environment }}
     permissions:
       contents: read
       id-token: write
