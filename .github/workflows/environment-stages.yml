@@ -17,31 +17,29 @@ on:
         required: true
 
 jobs:
- dev-environment:
+  dev-environment:
     name: Dev Environment
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both')
+    if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
-        action: ${{ inputs.action }}
-        environment: 'dev'
-        aws_region: 'ap-south-1'
-        terraform_dir: '.'
-        # Dev environment AWS role - update this ARN for dev environment
-        aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
+      action: ${{ inputs.action }}
+      environment: 'dev'
+      aws_region: 'ap-south-1'
+      terraform_dir: '.'
+      aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
     secrets:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   prod-environment-standalone:
     name: Prod Environment (Standalone)
     needs: dev-environment
-    if: ${{ (inputs.environment == 'prod') && (needs.dev-environment.result == 'skipped' || needs.dev-environment.result == 'success') }}
+    if: ${{ inputs.environment == 'prod' && (needs.dev-environment.result == 'skipped' || needs.dev-environment.result == 'success') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
       action: ${{ inputs.action }}
       environment: 'prod'
       aws_region: 'ap-south-1'
       terraform_dir: '.'
-      # Prod environment AWS role - update this ARN for prod environment  
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
     secrets:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
