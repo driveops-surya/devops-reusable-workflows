@@ -12,6 +12,7 @@ jobs:
     if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
+      action: ${{ inputs.action }}
       environment: dev
       aws_region: 'ap-south-1'
       terraform_dir: '.'
@@ -28,6 +29,7 @@ jobs:
     uses: ./.github/workflows/terraform-steps.yml
     with:
       environment: prod
+      action: ${{ inputs.action }}
       aws_region: 'ap-south-1'
       terraform_dir: '.'
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
