@@ -66,8 +66,8 @@ jobs:
         working-directory: ${{ env.TERRAFORM_DIR }}
 
       - id: plan
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.action == 'plan') }}
         name: Run terraform plan
-        if: ${{ inputs.action == 'plan' }}
         run: |
           set +e;
           terraform plan -input=false -out=tfplan -detailed-exitcode;
@@ -95,20 +95,17 @@ jobs:
 
       - id: apply
         name: Run terraform apply
-        if: ${{ inputs.action == 'apply' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.action == 'apply') }}
         run: |
-          terraform plan -input=false -out=tfplan
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            terraform plan -input=false -out=tfplan
+          fi
           terraform apply -auto-approve -input=false tfplan;
         working-directory: ${{ env.TERRAFORM_DIR }}
 
-      - id: destroy
-        name: Run terraform destroy
-        if: ${{ inputs.action == 'destroy' }}
-        run: |
-          terraform destroy -auto-approve -input=false;
-        working-directory: ${{ env.TERRAFORM_DIR }}
-
-      - name: Clean up plan file
-        if: ${{ (inputs.action == 'apply' || inputs.action == 'destroy') && success() }}
-        run: rm -f tfplan
-        working-directory: ${{ env.TERRAFORM_DIR }}
+      # - id: destroy
+      #   name: Run terraform destroy
+      #   if: ${{ inputs.action == 'destroy' }}
+      #   run: |
+      #     terraform destroy -auto-approve -input=false;
+      #   working-directory: ${{ env.TERRAFORM_DIR }}
