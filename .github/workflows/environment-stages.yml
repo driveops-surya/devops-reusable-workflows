@@ -2,6 +2,12 @@ name: Environment Stages
 
 on:
   workflow_call:
+    inputs:
+      action:
+        description: 'Terraform Action to Execute'
+        required: true
+        type: string
+  
 jobs:
   dev-environment:
     name: Dev Environment
