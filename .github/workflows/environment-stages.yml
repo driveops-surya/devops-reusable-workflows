@@ -2,17 +2,6 @@ name: Environment Stages
 
 on:
   workflow_call:
-    inputs:
-      action:
-        description: 'Terraform Action to Execute'
-        required: true
-        type: string
-      environment:
-        description: 'Environment to deploy to (dev/prod/both)'
-        required: false
-        type: string
-        default: 'dev'
-
 jobs:
   dev-environment:
     name: Dev Environment
@@ -23,8 +12,7 @@ jobs:
     if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
-      action: ${{ inputs.action }}
-      environment: 'dev'
+      environment: dev
       aws_region: 'ap-south-1'
       terraform_dir: '.'
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
@@ -39,8 +27,7 @@ jobs:
     if: ${{ inputs.environment == 'prod' && (needs.dev-environment.result == 'skipped' || needs.dev-environment.result == 'success') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
-      action: ${{ inputs.action }}
-      environment: 'prod'
+      environment: prod
       aws_region: 'ap-south-1'
       terraform_dir: '.'
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
