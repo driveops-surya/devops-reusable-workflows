@@ -16,6 +16,10 @@ on:
 jobs:
   dev-environment:
     name: Dev Environment
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
     if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
@@ -26,6 +30,10 @@ jobs:
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
 
   prod-environment-standalone:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
     name: Prod Environment (Standalone)
     needs: dev-environment
     if: ${{ inputs.environment == 'prod' && (needs.dev-environment.result == 'skipped' || needs.dev-environment.result == 'success') }}
