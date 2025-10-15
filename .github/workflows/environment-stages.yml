@@ -24,8 +24,6 @@ jobs:
       aws_region: 'ap-south-1'
       terraform_dir: '.'
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   prod-environment-standalone:
     name: Prod Environment (Standalone)
@@ -38,5 +36,3 @@ jobs:
       aws_region: 'ap-south-1'
       terraform_dir: '.'
       aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
