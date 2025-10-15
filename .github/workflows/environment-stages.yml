@@ -7,6 +7,11 @@ on:
         description: 'Terraform Action to Execute'
         required: true
         type: string
+     environment:
+        description: 'Environment to deploy to (dev/prod/both)'
+        required: false
+        type: string
+        default: 'dev'   
   
 jobs:
   dev-environment:
