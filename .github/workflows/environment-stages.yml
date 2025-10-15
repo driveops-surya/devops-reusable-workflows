@@ -20,7 +20,7 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev' || inputs.environment == 'both') }}
+    if: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && (inputs.environment == 'dev') }}
     uses: ./.github/workflows/terraform-steps.yml
     with:
       action: ${{ inputs.action }}
