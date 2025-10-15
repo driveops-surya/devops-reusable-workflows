@@ -7,7 +7,7 @@ on:
         description: 'Terraform Action to Execute'
         required: true
         type: string
-     environment:
+      environment:
         description: 'Environment to deploy to (dev/prod/both)'
         required: false
         type: string
