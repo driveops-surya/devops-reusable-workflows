@@ -25,9 +25,6 @@ on:
         description: 'AWS Role ARN to assume'
         required: true
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   terraform:
