@@ -70,7 +70,7 @@ jobs:
         name: Run terraform plan
         run: |
           set +e;
-          terraform plan -input=false -out=tfplan -detailed-exitcode;
+          terraform plan -input=false lock=false -out=tfplan -detailed-exitcode;
           PLAN_EXITCODE=$?;
           echo "exitcode=$PLAN_EXITCODE" | tee -a $GITHUB_OUTPUT;
 
@@ -98,7 +98,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == 2 || github.event_name == 'merge_group' }}
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            terraform plan -input=false -out=tfplan
+            terraform plan -input=false lock=false -out=tfplan
           fi
           terraform apply -auto-approve -input=false tfplan;
         working-directory: ${{ env.TERRAFORM_DIR }}
