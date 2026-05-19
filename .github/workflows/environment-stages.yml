@@ -11,7 +11,11 @@ on:
         description: 'Environment to deploy to (dev/prod/both)'
         required: false
         type: string
-        default: 'dev'   
+        default: 'dev'
+      account_id:
+        description: 'AWS Account ID'
+        required: true
+        type: string
   
 jobs:
   dev-environment:
@@ -27,7 +31,7 @@ jobs:
       environment: dev
       aws_region: 'ap-south-1'
       terraform_dir: '.'
-      aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
+      aws_role_arn: arn:aws:iam::${{ inputs.account_id }}:role/GithubActionsDeployments
 
   prod-environment-standalone:
     permissions:
@@ -43,4 +47,4 @@ jobs:
       action: ${{ inputs.action }}
       aws_region: 'ap-south-1'
       terraform_dir: '.'
-      aws_role_arn: 'arn:aws:iam::859493432175:role/GithubActionsDeployments'
+      aws_role_arn: arn:aws:iam::${{ inputs.account_id }}:role/GithubActionsDeployments
